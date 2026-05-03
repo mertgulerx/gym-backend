@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -29,4 +31,7 @@ public class ChargeProfile {
 
     @Column(nullable = false)
     private BigDecimal chargeCost;
+
+    @CreationTimestamp
+    private LocalDateTime creationTime;
 }
