@@ -1,9 +1,13 @@
 package com.ytu.gymbackend.dto.request;
 
+import com.ytu.gymbackend.validation.ValidDate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.beans.factory.annotation.Value;
 
 @Getter
 public class MachineCreateRequest {
@@ -15,5 +19,9 @@ public class MachineCreateRequest {
     @NotNull
     @NotBlank
     @Length(max = 10)
+    @ValidDate
     private String lastMaintenanceDate;
+
+    @Size(min = 1, max = 128)
+    private Integer maintenanceMonthlyPeriod;
 }

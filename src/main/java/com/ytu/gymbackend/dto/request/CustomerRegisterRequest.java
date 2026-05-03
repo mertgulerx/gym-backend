@@ -1,6 +1,5 @@
 package com.ytu.gymbackend.dto.request;
 
-import com.ytu.gymbackend.validation.ValidTcKimlikNo;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,11 +9,6 @@ import org.hibernate.validator.constraints.Length;
 
 @Getter
 public class CustomerRegisterRequest {
-    @NotBlank()
-    @NotNull
-    @ValidTcKimlikNo
-    private String tcKimlikNo;
-
     @NotNull
     @NotBlank
     private String name;
@@ -22,12 +16,6 @@ public class CustomerRegisterRequest {
     @NotNull
     @NotBlank
     private String surName;
-
-    @NotBlank(message = "Email cannot be blank")
-    @Length(max = 128, message = "Email is too long")
-    @Email(message = "Enter a valid email address", regexp = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
-    @NotNull
-    private String email;
 
     @NotNull
     @NotBlank

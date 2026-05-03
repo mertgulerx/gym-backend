@@ -35,6 +35,4 @@ public class Maintenance {
     private BigDecimal cost;
 
     private String info;
-
-
 }

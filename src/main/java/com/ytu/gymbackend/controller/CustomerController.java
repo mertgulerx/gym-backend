@@ -7,9 +7,11 @@ import com.ytu.gymbackend.model.customer.CustomerHealthReport;
 import com.ytu.gymbackend.model.user.UserType;
 import com.ytu.gymbackend.service.CustomerService;
 import com.ytu.gymbackend.service.session.UserSessionService;
+import com.ytu.gymbackend.validation.ValidDate;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -48,7 +50,7 @@ public class CustomerController {
 
     @PostMapping("/health_report/upload")
     public ResponseEntity<ApiResponse> uploadHealthReport(
-            @RequestParam(name = "tcKimlikNo") @NotNull @NotBlank String tcKimlikNo,
+            @RequestParam(name = "id") @NotNull @NotBlank Long id,
             @RequestParam("file") @NotNull MultipartFile file
     ) {
         userSessionService.validatePermission(new ArrayList<>(List.of(UserType.ADMIN, UserType.CLERK)));
@@ -57,14 +59,14 @@ public class CustomerController {
             return ResponseEntity.status(400).body(new ApiResponse(false, "wrong_file_format"));
         }
 
-        ApiResponse response = customerService.uploadHealthReport(tcKimlikNo, file);
+        ApiResponse response = customerService.uploadHealthReport(id, file);
 
         return ResponseEntity.status(response.isSuccess() ? 200 : 400).body(response);
     }
 
-    @GetMapping("/health_report/download")
-    public ResponseEntity<ByteArrayResource> downloadReport(@RequestParam(name = "tcKimlikNo") @NotNull @NotBlank String tcKimlikNo) {
-        CustomerHealthReport customerHealthReport = customerService.getHealthReport(tcKimlikNo);
+    @GetMapping("/health_report/get")
+    public ResponseEntity<ByteArrayResource> getHealthReport(@RequestParam(name = "id") @NotNull @NotBlank Long id) {
+        CustomerHealthReport customerHealthReport = customerService.getHealthReport(id);
 
         ByteArrayResource resource = new ByteArrayResource(customerHealthReport.getPdfData());
 
@@ -78,24 +80,12 @@ public class CustomerController {
 
     @PutMapping("/health_report/verify")
     public ResponseEntity<ApiResponse> verifyHealthReport(
-            @RequestParam(name = "tcKimlikNo") @NotNull @NotBlank String tcKimlikNo,
-            @RequestParam(name = "revisionDate") @NotNull @NotBlank String revisionDate
+            @RequestParam(name = "id") @NotNull @NotBlank Long id,
+            @RequestParam(name = "revisionDate") @NotNull @NotBlank @ValidDate String revisionDate
     ) {
         userSessionService.validatePermission(new ArrayList<>(List.of(UserType.ADMIN, UserType.CLERK)));
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        LocalDate calculatedRevisionDate;
-
-        try {
-            calculatedRevisionDate = LocalDate.parse(revisionDate, formatter);
-        } catch (DateTimeParseException e) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new ApiResponse(false, "invalid_date_format"));
-        }
-
-        ApiResponse response = customerService.verifyHealthReport(tcKimlikNo, calculatedRevisionDate);
+        ApiResponse response = customerService.verifyHealthReport(id, LocalDate.parse(revisionDate));
 
         return ResponseEntity.status(response.isSuccess() ? 200 : 400).body(response);
 

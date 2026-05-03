@@ -13,9 +13,9 @@ import java.time.LocalDate;
 public interface CustomerService {
     ApiResponse register(@Valid CustomerRegisterRequest request);
 
-    ApiResponse uploadHealthReport(String tcKimlikNo, MultipartFile file);
+    ApiResponse uploadHealthReport(Long id, MultipartFile file);
 
-    CustomerHealthReport getHealthReport(String tcKimlikNo);
+    CustomerHealthReport getHealthReport(Long id);
 
-    ApiResponse verifyHealthReport(String tcKimlikNo, LocalDate revisionDate);
+    ApiResponse verifyHealthReport(Long id, LocalDate revisionDate);
 }

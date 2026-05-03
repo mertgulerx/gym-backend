@@ -9,7 +9,6 @@ import com.ytu.gymbackend.model.customer.CustomerHealthReportStatus;
 import com.ytu.gymbackend.model.customer.CustomerStatus;
 import com.ytu.gymbackend.repository.CustomerHealthReportRepository;
 import com.ytu.gymbackend.repository.CustomerRepository;
-import com.ytu.gymbackend.util.EncryptUtil;
 import com.ytu.gymbackend.util.MapperUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -22,50 +21,31 @@ import java.util.Optional;
 @Service
 public class CustomerServiceImpl implements CustomerService{
     private final CustomerRepository customerRepository;
-    private final EncryptUtil encryptUtil;
     private final MapperUtil mapperUtil;
     private final CustomerHealthReportRepository customerHealthReportRepository;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository, EncryptUtil encryptUtil, MapperUtil mapperUtil, CustomerHealthReportRepository customerHealthReportRepository) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, MapperUtil mapperUtil, CustomerHealthReportRepository customerHealthReportRepository) {
         this.customerRepository = customerRepository;
-        this.encryptUtil = encryptUtil;
         this.mapperUtil = mapperUtil;
         this.customerHealthReportRepository = customerHealthReportRepository;
     }
 
     @Override
     public ApiResponse register(CustomerRegisterRequest request) {
-        String tcKimlikNo = request.getTcKimlikNo();
-        String tcKimlikNoIndex = encryptUtil.generateBlindIndex(tcKimlikNo);
-
-        customerRepository.findByTcKimlikNoIndex(tcKimlikNoIndex).ifPresent(customer -> {
+        customerRepository.findByPhoneNumber(request.getPhoneNumber()).ifPresent(customer -> {
             throw new BadRequestException("customer_already_exist");
         });
 
         Customer customer = mapperUtil.map(request, Customer.class);
         customer.setCustomerStatus(CustomerStatus.PENDING);
-        customer.setTcKimlikNoIndex(tcKimlikNoIndex);
-        customer.setTcKimlikNoEncrypted(encryptUtil.encryptAES(tcKimlikNo));
         customerRepository.save(customer);
         return new ApiResponse(true, "customer_created");
     }
 
-    private Customer findCustomerByTcKimlikNo(String tcKimlikNo){
-        String tcKimlikNoIndex = encryptUtil.generateBlindIndex(tcKimlikNo);
-
-        Optional<Customer> optionalCustomer = customerRepository.findByTcKimlikNoIndex(tcKimlikNoIndex);
-
-        if (optionalCustomer.isPresent()){
-            return optionalCustomer.get();
-        }
-
-        throw new BadRequestException("customer_not_found");
-    }
-
     @Override
     @Transactional
-    public ApiResponse uploadHealthReport(String tcKimlikNo, MultipartFile file) {
-        Customer customer = findCustomerByTcKimlikNo(tcKimlikNo);
+    public ApiResponse uploadHealthReport(Long id, MultipartFile file) {
+        Customer customer = findCustomerById(id);
 
         try {
             CustomerHealthReport existingCustomerHealthReport = customer.getCustomerHealthReport();
@@ -88,8 +68,8 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public CustomerHealthReport getHealthReport(String tcKimlikNo) {
-        Customer customer = findCustomerByTcKimlikNo(tcKimlikNo);
+    public CustomerHealthReport getHealthReport(Long id) {
+        Customer customer = findCustomerById(id);
 
         CustomerHealthReport customerHealthReport = customer.getCustomerHealthReport();
         if (customerHealthReport == null){
@@ -99,8 +79,8 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public ApiResponse verifyHealthReport(String tcKimlikNo, LocalDate revisionDate) {
-        Customer customer = findCustomerByTcKimlikNo(tcKimlikNo);
+    public ApiResponse verifyHealthReport(Long id, LocalDate revisionDate) {
+        Customer customer = findCustomerById(id);
 
         CustomerHealthReport customerHealthReport = customer.getCustomerHealthReport();
         if (customerHealthReport == null){
@@ -112,6 +92,16 @@ public class CustomerServiceImpl implements CustomerService{
         customerHealthReport.setEndDate(revisionDate.plusYears(1));
         customerHealthReportRepository.save(customerHealthReport);
         return new ApiResponse(true, "customer_health_report_verified");
+    }
+
+    private Customer findCustomerById(Long id){
+        Optional<Customer> optionalCustomer = customerRepository.findById(id);
+
+        if (optionalCustomer.isPresent()){
+            return optionalCustomer.get();
+        }
+
+        throw new BadRequestException("customer_not_found");
     }
 
 

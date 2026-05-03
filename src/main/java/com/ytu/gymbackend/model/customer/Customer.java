@@ -20,20 +20,11 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "tc_kimlik_no_encrypted", nullable = false, columnDefinition = "VARCHAR(255)")
-    private String tcKimlikNoEncrypted;
-
-    @Column(name = "tc_kimlik_no_index", nullable = false, unique = true, columnDefinition = "CHAR(64)")
-    private String tcKimlikNoIndex;
-
     @Column(name = "name")
     private String name;
 
     @Column(name = "sur_name")
     private String surName;
-
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
 
     @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
@@ -44,6 +35,6 @@ public class Customer {
     @CreationTimestamp
     private LocalDateTime accountCreationDate;
 
-    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     private CustomerHealthReport customerHealthReport;
 }

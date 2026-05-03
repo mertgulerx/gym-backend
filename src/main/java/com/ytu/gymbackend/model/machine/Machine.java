@@ -27,6 +27,9 @@ public class Machine {
     @Column(nullable = false)
     private LocalDate lastMaintenanceDate;
 
+    @Column(nullable = false)
+    private Integer maintenanceMonthlyPeriod;
+
     @OneToMany(mappedBy = "machine", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Maintenance> maintenanceList = new ArrayList<>();
 }
