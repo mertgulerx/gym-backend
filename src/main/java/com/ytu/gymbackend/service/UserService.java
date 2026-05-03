@@ -11,4 +11,6 @@ public interface UserService {
     String login(@Valid LoginRequest request);
 
     ApiResponse register(@Valid UserRegisterRequest request);
+
+    ApiResponse passwordReset(Long id, String backupSecret, String newPassword);
 }

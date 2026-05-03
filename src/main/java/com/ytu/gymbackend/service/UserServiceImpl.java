@@ -3,6 +3,7 @@ package com.ytu.gymbackend.service;
 import com.ytu.gymbackend.dto.ApiResponse;
 import com.ytu.gymbackend.dto.request.LoginRequest;
 import com.ytu.gymbackend.dto.request.UserRegisterRequest;
+import com.ytu.gymbackend.exception.BadRequestException;
 import com.ytu.gymbackend.exception.UnauthorizedException;
 import com.ytu.gymbackend.model.user.User;
 import com.ytu.gymbackend.model.user.UserSession;
@@ -46,7 +47,29 @@ public class UserServiceImpl implements UserService {
         if (request.getBackupSecret() != null){
             newUser.setBackupSecret(passwordUtils.hashPassword(request.getBackupSecret()));
         }
+        newUser.setName(request.getName());
+        newUser.setSurName(request.getSurName());
         userRepository.save(newUser);
         return new ApiResponse(true, "user_created");
+    }
+
+    @Override
+    public ApiResponse passwordReset(Long id, String backupSecret, String newPassword) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UnauthorizedException("invalid_credentials"));
+
+        String hashedBackupSecret = user.getBackupSecret();
+        if (hashedBackupSecret == null){
+            throw new BadRequestException("no_backup_secret");
+        }
+
+        if (!passwordUtils.checkPassword(backupSecret, hashedBackupSecret)){
+            throw new UnauthorizedException("invalid_credentials");
+        }
+
+        user.setHashedPassword(passwordUtils.hashPassword(newPassword));
+        userRepository.save(user);
+
+        return new ApiResponse(true, "password_reset_success");
     }
 }

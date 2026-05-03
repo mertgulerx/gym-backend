@@ -50,7 +50,7 @@ public class CustomerController {
 
     @PostMapping("/health_report/upload")
     public ResponseEntity<ApiResponse> uploadHealthReport(
-            @RequestParam(name = "id") @NotNull @NotBlank Long id,
+            @RequestParam(name = "id") @NotNull Long id,
             @RequestParam("file") @NotNull MultipartFile file
     ) {
         userSessionService.validatePermission(new ArrayList<>(List.of(UserType.ADMIN, UserType.CLERK)));
@@ -65,7 +65,7 @@ public class CustomerController {
     }
 
     @GetMapping("/health_report/get")
-    public ResponseEntity<ByteArrayResource> getHealthReport(@RequestParam(name = "id") @NotNull @NotBlank Long id) {
+    public ResponseEntity<ByteArrayResource> getHealthReport(@RequestParam(name = "id") @NotNull Long id) {
         CustomerHealthReport customerHealthReport = customerService.getHealthReport(id);
 
         ByteArrayResource resource = new ByteArrayResource(customerHealthReport.getPdfData());
@@ -80,8 +80,8 @@ public class CustomerController {
 
     @PutMapping("/health_report/verify")
     public ResponseEntity<ApiResponse> verifyHealthReport(
-            @RequestParam(name = "id") @NotNull @NotBlank Long id,
-            @RequestParam(name = "revisionDate") @NotNull @NotBlank @ValidDate String revisionDate
+            @RequestParam(name = "id") @NotNull Long id,
+            @RequestParam(name = "revisionDate") @NotBlank @ValidDate String revisionDate
     ) {
         userSessionService.validatePermission(new ArrayList<>(List.of(UserType.ADMIN, UserType.CLERK)));
 

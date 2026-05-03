@@ -3,6 +3,7 @@ package com.ytu.gymbackend.dto.request;
 import com.ytu.gymbackend.model.user.UserType;
 import com.ytu.gymbackend.validation.ValidEnum;
 import com.ytu.gymbackend.validation.ValidPassword;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
@@ -16,5 +17,12 @@ public class UserRegisterRequest {
     @NotNull
     private String password;
 
+    @NotBlank
+    private String name;
+
+    @NotBlank
+    private String surName;
+
+    @NotBlank
     private String backupSecret;
 }

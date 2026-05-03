@@ -9,7 +9,7 @@ public class PasswordUtils {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
-    public Boolean checkPassword(String passwd, String hash) {
-        return BCrypt.checkpw(passwd, hash);
+    public Boolean checkPassword(String password, String hashed) {
+        return BCrypt.checkpw(password, hashed);
     }
 }

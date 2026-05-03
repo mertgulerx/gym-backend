@@ -25,6 +25,10 @@ public class User {
 
     private String backupSecret;
 
+    private String name;
+
+    private String surName;
+
     @CreationTimestamp
     private LocalDateTime accountCreationDate;
 
