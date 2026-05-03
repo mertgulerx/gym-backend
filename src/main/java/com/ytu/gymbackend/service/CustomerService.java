@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+
 @Service
 public interface CustomerService {
     ApiResponse register(@Valid CustomerRegisterRequest request);
@@ -14,4 +16,6 @@ public interface CustomerService {
     ApiResponse uploadHealthReport(String tcKimlikNo, MultipartFile file);
 
     CustomerHealthReport getHealthReport(String tcKimlikNo);
+
+    ApiResponse verifyHealthReport(String tcKimlikNo, LocalDate revisionDate);
 }

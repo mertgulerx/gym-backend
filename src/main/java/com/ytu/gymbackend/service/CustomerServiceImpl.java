@@ -11,9 +11,11 @@ import com.ytu.gymbackend.repository.CustomerHealthReportRepository;
 import com.ytu.gymbackend.repository.CustomerRepository;
 import com.ytu.gymbackend.util.EncryptUtil;
 import com.ytu.gymbackend.util.MapperUtil;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -61,10 +63,16 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
+    @Transactional
     public ApiResponse uploadHealthReport(String tcKimlikNo, MultipartFile file) {
         Customer customer = findCustomerByTcKimlikNo(tcKimlikNo);
 
         try {
+            CustomerHealthReport existingCustomerHealthReport = customer.getCustomerHealthReport();
+            if (existingCustomerHealthReport != null){
+                customerHealthReportRepository.delete(customer.getCustomerHealthReport());
+            }
+
             CustomerHealthReport customerHealthReport = new CustomerHealthReport();
 
             customerHealthReport.setPdfData(file.getBytes());
@@ -87,7 +95,23 @@ public class CustomerServiceImpl implements CustomerService{
         if (customerHealthReport == null){
             throw new BadRequestException("health_report_not_found");
         }
-        return  customerHealthReport;
+        return customerHealthReport;
+    }
+
+    @Override
+    public ApiResponse verifyHealthReport(String tcKimlikNo, LocalDate revisionDate) {
+        Customer customer = findCustomerByTcKimlikNo(tcKimlikNo);
+
+        CustomerHealthReport customerHealthReport = customer.getCustomerHealthReport();
+        if (customerHealthReport == null){
+            throw new BadRequestException("health_report_not_found");
+        }
+
+        customerHealthReport.setCustomerHealthReportStatus(CustomerHealthReportStatus.VERIFIED);
+        customerHealthReport.setRevisionDate(revisionDate);
+        customerHealthReport.setEndDate(revisionDate.plusYears(1));
+        customerHealthReportRepository.save(customerHealthReport);
+        return new ApiResponse(true, "customer_health_report_verified");
     }
 
 

@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Array;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -50,11 +53,11 @@ public class CustomerController {
     ) {
         userSessionService.validatePermission(new ArrayList<>(List.of(UserType.ADMIN, UserType.CLERK)));
 
-        ApiResponse response = customerService.uploadHealthReport(tcKimlikNo, file);
-
         if (file.isEmpty() || !Objects.equals(file.getContentType(), "application/pdf")) {
             return ResponseEntity.status(400).body(new ApiResponse(false, "wrong_file_format"));
         }
+
+        ApiResponse response = customerService.uploadHealthReport(tcKimlikNo, file);
 
         return ResponseEntity.status(response.isSuccess() ? 200 : 400).body(response);
     }
@@ -73,7 +76,29 @@ public class CustomerController {
     }
 
 
+    @PutMapping("/health_report/verify")
+    public ResponseEntity<ApiResponse> verifyHealthReport(
+            @RequestParam(name = "tcKimlikNo") @NotNull @NotBlank String tcKimlikNo,
+            @RequestParam(name = "revisionDate") @NotNull @NotBlank String revisionDate
+    ) {
+        userSessionService.validatePermission(new ArrayList<>(List.of(UserType.ADMIN, UserType.CLERK)));
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
+        LocalDate calculatedRevisionDate;
+
+        try {
+            calculatedRevisionDate = LocalDate.parse(revisionDate, formatter);
+        } catch (DateTimeParseException e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ApiResponse(false, "invalid_date_format"));
+        }
+
+        ApiResponse response = customerService.verifyHealthReport(tcKimlikNo, calculatedRevisionDate);
+
+        return ResponseEntity.status(response.isSuccess() ? 200 : 400).body(response);
+
+    }
 
 }
