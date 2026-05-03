@@ -34,7 +34,7 @@ public class CustomerController {
     private final UserSessionService userSessionService;
     private final CustomerService customerService;
 
-    public CustomerController(@Qualifier("userSessionService") UserSessionService userSessionService, @Qualifier("customerService") CustomerService customerService) {
+    public CustomerController( UserSessionService userSessionService, CustomerService customerService) {
         this.userSessionService = userSessionService;
         this.customerService = customerService;
     }
@@ -66,6 +66,8 @@ public class CustomerController {
 
     @GetMapping("/health_report/get")
     public ResponseEntity<ByteArrayResource> getHealthReport(@RequestParam(name = "id") @NotNull Long id) {
+        userSessionService.validatePermission(new ArrayList<>(List.of(UserType.ADMIN, UserType.CLERK)));
+
         CustomerHealthReport customerHealthReport = customerService.getHealthReport(id);
 
         ByteArrayResource resource = new ByteArrayResource(customerHealthReport.getPdfData());

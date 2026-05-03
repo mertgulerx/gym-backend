@@ -32,6 +32,7 @@ public class UserController {
         ApiResponse response = userService.register(request);
         return ResponseEntity.status(response.isSuccess() ? 200 : 400).body(response);
     }
+
     @PostMapping("/password-reset")
     public ResponseEntity<ApiResponse> passwordReset(
             @RequestParam(name = "id") Long id,

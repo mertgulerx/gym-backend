@@ -33,7 +33,10 @@ public class Machine {
     @OneToMany(mappedBy = "machine", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Maintenance> maintenanceList = new ArrayList<>();
 
-
     @OneToMany(mappedBy = "machine", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Repair> repairList = new ArrayList<>();
+
+    @Lob
+    @Column(name = "image", columnDefinition = "BLOB")
+    private byte[] image;
 }

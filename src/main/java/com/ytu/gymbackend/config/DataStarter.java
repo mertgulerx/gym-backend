@@ -8,6 +8,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class DataStarter implements ApplicationListener<ContextRefreshedEvent> {
     private final PasswordUtils passwordUtils;
@@ -20,10 +22,16 @@ public class DataStarter implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        if (!userRepository.findAll().isEmpty()){
+            return;
+        }
+
         User user = new User();
         user.setUserType(UserType.ADMIN);
         user.setHashedPassword(passwordUtils.hashPassword("password123ytu"));
         user.setBackupSecret(passwordUtils.hashPassword("ytu"));
+        user.setName("Ronnie");
+        user.setSurName("Coleman");
         userRepository.save(user);
     }
 }

@@ -58,10 +58,10 @@ public class CustomerServiceImpl implements CustomerService{
             customerHealthReport.setPdfData(file.getBytes());
             customerHealthReport.setCustomer(customer);
             customerHealthReport.setCustomerHealthReportStatus(CustomerHealthReportStatus.PENDING);
-            customerHealthReport.setFileName(customer.getName() + "_" + customer.getSurName() + "_health-report_" + LocalDateTime.now().toString());
+            customerHealthReport.setFileName(customer.getName() + "_" + customer.getSurName() + "_health-report_" + LocalDateTime.now());
             customerHealthReportRepository.save(customerHealthReport);
         } catch (Exception e) {
-            throw new BadRequestException("Failed to store PDF file" + e.getMessage());
+            throw new BadRequestException("failed_to_save_file");
         }
 
         return new ApiResponse(true, "customer_health_report_created");
@@ -95,14 +95,6 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     private Customer findCustomerById(Long id){
-        Optional<Customer> optionalCustomer = customerRepository.findById(id);
-
-        if (optionalCustomer.isPresent()){
-            return optionalCustomer.get();
-        }
-
-        throw new BadRequestException("customer_not_found");
+        return customerRepository.findById(id).orElseThrow(() -> new BadRequestException("customer_not_found"));
     }
-
-
 }
