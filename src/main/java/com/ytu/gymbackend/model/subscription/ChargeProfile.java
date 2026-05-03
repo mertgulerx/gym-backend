@@ -22,6 +22,8 @@ public class ChargeProfile {
     @Column(nullable = false)
     private String title;
 
+    private String info;
+
     @Column(nullable = false)
     private BigDecimal chargeRate;
 

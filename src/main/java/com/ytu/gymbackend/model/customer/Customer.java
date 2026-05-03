@@ -1,5 +1,7 @@
 package com.ytu.gymbackend.model.customer;
 
+import com.ytu.gymbackend.model.subscription.Subscription;
+import com.ytu.gymbackend.model.subscription.SubscriptionModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,4 +39,7 @@ public class Customer {
 
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     private CustomerHealthReport customerHealthReport;
+
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
+    private Subscription subscription;
 }

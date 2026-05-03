@@ -25,7 +25,7 @@ public class UserSessionServiceImpl implements UserSessionService {
     @Override
     public void validatePermission(UserType userType){
         Optional<UserSession> optionalUserSession = getCurrentSession();
-        if (optionalUserSession.isPresent()){
+        if (optionalUserSession.isEmpty()){
             throw new UnauthorizedException("unauthorized");
         }
 
@@ -38,7 +38,7 @@ public class UserSessionServiceImpl implements UserSessionService {
     @Override
     public void validatePermission(List<UserType> userTypeList){
         Optional<UserSession> optionalUserSession = getCurrentSession();
-        if (optionalUserSession.isPresent()){
+        if (optionalUserSession.isEmpty()){
             throw new UnauthorizedException("unauthorized");
         }
 
@@ -46,8 +46,9 @@ public class UserSessionServiceImpl implements UserSessionService {
         boolean authorized = false;
 
         for (UserType userType : userTypeList){
-            if (userSession.getUser().getUserType().equals(userType)){
+            if (userSession.getUser().getUserType().equals(userType)) {
                 authorized = true;
+                break;
             }
         }
         if (!authorized){

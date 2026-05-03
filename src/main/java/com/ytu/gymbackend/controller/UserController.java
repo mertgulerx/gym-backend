@@ -23,7 +23,6 @@ public class UserController {
         this.userSessionService = userSessionService;
     }
 
-
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> register(
             @Valid @RequestBody UserRegisterRequest request

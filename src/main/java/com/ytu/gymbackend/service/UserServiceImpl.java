@@ -43,6 +43,9 @@ public class UserServiceImpl implements UserService {
         User newUser = new User();
         newUser.setUserType(UserType.valueOf(request.getUserType()));
         newUser.setHashedPassword(passwordUtils.hashPassword(request.getPassword()));
+        if (request.getBackupSecret() != null){
+            newUser.setBackupSecret(passwordUtils.hashPassword(request.getBackupSecret()));
+        }
         userRepository.save(newUser);
         return new ApiResponse(true, "user_created");
     }

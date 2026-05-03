@@ -23,6 +23,8 @@ public class User {
     @Column(nullable = false)
     private String hashedPassword;
 
+    private String backupSecret;
+
     @CreationTimestamp
     private LocalDateTime accountCreationDate;
 

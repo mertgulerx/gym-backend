@@ -15,4 +15,6 @@ public class UserRegisterRequest {
     @ValidPassword
     @NotNull
     private String password;
+
+    private String backupSecret;
 }
