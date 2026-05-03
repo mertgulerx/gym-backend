@@ -1,14 +1,12 @@
 package com.ytu.gymbackend.config;
 
 import com.ytu.gymbackend.model.user.User;
-import com.ytu.gymbackend.model.user.UserType;
+import com.ytu.gymbackend.model.user.UserRole;
 import com.ytu.gymbackend.repository.UserRepository;
 import com.ytu.gymbackend.util.PasswordUtils;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class DataStarter implements ApplicationListener<ContextRefreshedEvent> {
@@ -27,7 +25,7 @@ public class DataStarter implements ApplicationListener<ContextRefreshedEvent> {
         }
 
         User user = new User();
-        user.setUserType(UserType.ADMIN);
+        user.setUserRole(UserRole.ADMIN);
         user.setHashedPassword(passwordUtils.hashPassword("password123ytu"));
         user.setBackupSecret(passwordUtils.hashPassword("ytu"));
         user.setName("Ronnie");

@@ -7,7 +7,7 @@ import com.ytu.gymbackend.exception.BadRequestException;
 import com.ytu.gymbackend.exception.UnauthorizedException;
 import com.ytu.gymbackend.model.user.User;
 import com.ytu.gymbackend.model.user.UserSession;
-import com.ytu.gymbackend.model.user.UserType;
+import com.ytu.gymbackend.model.user.UserRole;
 import com.ytu.gymbackend.repository.UserRepository;
 import com.ytu.gymbackend.service.session.UserSessionService;
 import com.ytu.gymbackend.util.PasswordUtils;
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ApiResponse register(UserRegisterRequest request) {
         User newUser = new User();
-        newUser.setUserType(UserType.valueOf(request.getUserType()));
+        newUser.setUserRole(UserRole.valueOf(request.getUserType()));
         newUser.setHashedPassword(passwordUtils.hashPassword(request.getPassword()));
         if (request.getBackupSecret() != null){
             newUser.setBackupSecret(passwordUtils.hashPassword(request.getBackupSecret()));

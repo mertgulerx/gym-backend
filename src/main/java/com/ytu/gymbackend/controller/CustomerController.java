@@ -2,17 +2,14 @@ package com.ytu.gymbackend.controller;
 
 import com.ytu.gymbackend.dto.ApiResponse;
 import com.ytu.gymbackend.dto.request.CustomerRegisterRequest;
-import com.ytu.gymbackend.dto.request.UserRegisterRequest;
 import com.ytu.gymbackend.model.customer.CustomerHealthReport;
-import com.ytu.gymbackend.model.user.UserType;
+import com.ytu.gymbackend.model.user.UserRole;
 import com.ytu.gymbackend.service.CustomerService;
 import com.ytu.gymbackend.service.session.UserSessionService;
 import com.ytu.gymbackend.validation.ValidDate;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -20,10 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -43,7 +37,7 @@ public class CustomerController {
     public ResponseEntity<ApiResponse> registerCustomer(
             @Valid @RequestBody CustomerRegisterRequest request
     ) {
-        userSessionService.validatePermission(new ArrayList<>(List.of(UserType.ADMIN, UserType.CLERK)));
+        userSessionService.validatePermission(new ArrayList<>(List.of(UserRole.ADMIN, UserRole.CLERK)));
         ApiResponse response = customerService.register(request);
         return ResponseEntity.status(response.isSuccess() ? 200 : 400).body(response);
     }
@@ -53,7 +47,7 @@ public class CustomerController {
             @RequestParam(name = "id") @NotNull Long id,
             @RequestParam("file") @NotNull MultipartFile file
     ) {
-        userSessionService.validatePermission(new ArrayList<>(List.of(UserType.ADMIN, UserType.CLERK)));
+        userSessionService.validatePermission(new ArrayList<>(List.of(UserRole.ADMIN, UserRole.CLERK)));
 
         if (file.isEmpty() || !Objects.equals(file.getContentType(), "application/pdf")) {
             return ResponseEntity.status(400).body(new ApiResponse(false, "wrong_file_format"));
@@ -66,7 +60,7 @@ public class CustomerController {
 
     @GetMapping("/health_report/get")
     public ResponseEntity<ByteArrayResource> getHealthReport(@RequestParam(name = "id") @NotNull Long id) {
-        userSessionService.validatePermission(new ArrayList<>(List.of(UserType.ADMIN, UserType.CLERK)));
+        userSessionService.validatePermission(new ArrayList<>(List.of(UserRole.ADMIN, UserRole.CLERK)));
 
         CustomerHealthReport customerHealthReport = customerService.getHealthReport(id);
 
@@ -85,7 +79,7 @@ public class CustomerController {
             @RequestParam(name = "id") @NotNull Long id,
             @RequestParam(name = "revisionDate") @NotBlank @ValidDate String revisionDate
     ) {
-        userSessionService.validatePermission(new ArrayList<>(List.of(UserType.ADMIN, UserType.CLERK)));
+        userSessionService.validatePermission(new ArrayList<>(List.of(UserRole.ADMIN, UserRole.CLERK)));
 
         ApiResponse response = customerService.verifyHealthReport(id, LocalDate.parse(revisionDate));
 

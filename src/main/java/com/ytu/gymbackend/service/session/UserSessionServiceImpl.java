@@ -3,7 +3,7 @@ package com.ytu.gymbackend.service.session;
 import com.ytu.gymbackend.exception.UnauthorizedException;
 import com.ytu.gymbackend.model.user.User;
 import com.ytu.gymbackend.model.user.UserSession;
-import com.ytu.gymbackend.model.user.UserType;
+import com.ytu.gymbackend.model.user.UserRole;
 import com.ytu.gymbackend.repository.UserSessionRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,20 +23,20 @@ public class UserSessionServiceImpl implements UserSessionService {
     }
 
     @Override
-    public void validatePermission(UserType userType){
+    public void validatePermission(UserRole userRole){
         Optional<UserSession> optionalUserSession = getCurrentSession();
         if (optionalUserSession.isEmpty()){
             throw new UnauthorizedException("unauthorized");
         }
 
         UserSession userSession = optionalUserSession.get();
-        if (!userSession.getUser().getUserType().equals(userType)){
+        if (!userSession.getUser().getUserRole().equals(userRole)){
             throw new UnauthorizedException("unauthorized");
         }
     }
 
     @Override
-    public void validatePermission(List<UserType> userTypeList){
+    public void validatePermission(List<UserRole> userRoleList){
         Optional<UserSession> optionalUserSession = getCurrentSession();
         if (optionalUserSession.isEmpty()){
             throw new UnauthorizedException("unauthorized");
@@ -45,8 +45,8 @@ public class UserSessionServiceImpl implements UserSessionService {
         UserSession userSession = optionalUserSession.get();
         boolean authorized = false;
 
-        for (UserType userType : userTypeList){
-            if (userSession.getUser().getUserType().equals(userType)) {
+        for (UserRole userRole : userRoleList){
+            if (userSession.getUser().getUserRole().equals(userRole)) {
                 authorized = true;
                 break;
             }

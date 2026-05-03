@@ -2,9 +2,7 @@ package com.ytu.gymbackend.controller;
 
 import com.ytu.gymbackend.dto.ApiResponse;
 import com.ytu.gymbackend.dto.request.MachineCreateRequest;
-import com.ytu.gymbackend.model.customer.CustomerHealthReport;
-import com.ytu.gymbackend.model.machine.Machine;
-import com.ytu.gymbackend.model.user.UserType;
+import com.ytu.gymbackend.model.user.UserRole;
 import com.ytu.gymbackend.service.MachineService;
 import com.ytu.gymbackend.service.session.UserSessionService;
 import jakarta.validation.Valid;
@@ -16,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.URLConnection;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -36,7 +33,7 @@ public class MachineController {
             @Valid @RequestBody MachineCreateRequest request,
             @RequestParam("file") @NotNull MultipartFile image
     ) {
-        userSessionService.validatePermission(UserType.ADMIN);
+        userSessionService.validatePermission(UserRole.ADMIN);
 
         if (image.isEmpty() || !(Objects.equals(image.getContentType(), "image/jpeg"))) {
             return ResponseEntity.status(400).body(new ApiResponse(false, "wrong_file_format"));

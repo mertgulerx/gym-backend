@@ -1,6 +1,6 @@
 package com.ytu.gymbackend.model.user;
 
-public enum UserType {
+public enum UserRole {
     ADMIN,
     CLERK,
     REPAIRMAN

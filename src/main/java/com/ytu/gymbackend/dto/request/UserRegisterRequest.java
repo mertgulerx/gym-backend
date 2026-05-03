@@ -1,6 +1,6 @@
 package com.ytu.gymbackend.dto.request;
 
-import com.ytu.gymbackend.model.user.UserType;
+import com.ytu.gymbackend.model.user.UserRole;
 import com.ytu.gymbackend.validation.ValidEnum;
 import com.ytu.gymbackend.validation.ValidPassword;
 import jakarta.validation.constraints.NotBlank;
@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @Getter
 public class UserRegisterRequest {
-    @ValidEnum(enumClass = UserType.class)
+    @ValidEnum(enumClass = UserRole.class)
     @NotNull
     private String userType;
 

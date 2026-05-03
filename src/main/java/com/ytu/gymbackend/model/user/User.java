@@ -34,7 +34,7 @@ public class User {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserType userType;
+    private UserRole userRole;
 
     @OneToMany
     private List<UserSession> userSessions = new ArrayList<>();

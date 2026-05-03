@@ -2,7 +2,7 @@ package com.ytu.gymbackend.service.session;
 
 import com.ytu.gymbackend.model.user.User;
 import com.ytu.gymbackend.model.user.UserSession;
-import com.ytu.gymbackend.model.user.UserType;
+import com.ytu.gymbackend.model.user.UserRole;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +10,9 @@ import java.util.Optional;
 
 @Service
 public interface UserSessionService {
-    void validatePermission(UserType userType);
+    void validatePermission(UserRole userRole);
 
-    void validatePermission(List<UserType> userType);
+    void validatePermission(List<UserRole> userRole);
 
     UserSession createSession(User user, int hoursValid);
     boolean isSessionValid(String token);
