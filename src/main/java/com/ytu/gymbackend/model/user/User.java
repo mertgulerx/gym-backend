@@ -24,7 +24,7 @@ public class User {
     private String hashedPassword;
 
     @CreationTimestamp
-    private LocalDateTime registerDate;
+    private LocalDateTime accountCreationDate;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,6 +31,26 @@ public class UserSessionServiceImpl implements UserSessionService {
 
         UserSession userSession = optionalUserSession.get();
         if (!userSession.getUser().getUserType().equals(userType)){
+            throw new UnauthorizedException("unauthorized");
+        }
+    }
+
+    @Override
+    public void validatePermission(List<UserType> userTypeList){
+        Optional<UserSession> optionalUserSession = getCurrentSession();
+        if (optionalUserSession.isPresent()){
+            throw new UnauthorizedException("unauthorized");
+        }
+
+        UserSession userSession = optionalUserSession.get();
+        boolean authorized = false;
+
+        for (UserType userType : userTypeList){
+            if (userSession.getUser().getUserType().equals(userType)){
+                authorized = true;
+            }
+        }
+        if (!authorized){
             throw new UnauthorizedException("unauthorized");
         }
     }

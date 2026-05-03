@@ -5,11 +5,14 @@ import com.ytu.gymbackend.model.user.UserSession;
 import com.ytu.gymbackend.model.user.UserType;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public interface UserSessionService {
     void validatePermission(UserType userType);
+
+    void validatePermission(List<UserType> userType);
 
     UserSession createSession(User user, int hoursValid);
     boolean isSessionValid(String token);
