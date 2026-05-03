@@ -16,8 +16,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "machine_maintenances")
-public class Maintenance {
+@Table(name = "machine_repairs")
+public class Repair {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,7 +27,9 @@ public class Maintenance {
     private Machine machine;
 
     @CreationTimestamp
-    private LocalDate creationDate;
+    private LocalDate sentDate;
+
+    private Integer estimatedReturnDays;
 
     @JoinColumn(name = "maintainer_id", nullable = false)
     @OneToOne
@@ -36,4 +38,6 @@ public class Maintenance {
     private BigDecimal cost;
 
     private String info;
+
+    private Boolean isCompleted;
 }

@@ -1,0 +1,30 @@
+package com.ytu.gymbackend.model.subscription;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Table(name = "charge_profiles")
+public class ChargeProfile {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
+    private BigDecimal chargeRate;
+
+    @Column(nullable = false)
+    private BigDecimal chargeCost;
+}
