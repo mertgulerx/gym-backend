@@ -1,7 +1,9 @@
 package com.ytu.gymbackend.service.session;
 
+import com.ytu.gymbackend.exception.UnauthorizedException;
 import com.ytu.gymbackend.model.user.User;
 import com.ytu.gymbackend.model.user.UserSession;
+import com.ytu.gymbackend.model.user.UserType;
 import com.ytu.gymbackend.repository.UserSessionRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +19,19 @@ public class UserSessionServiceImpl implements UserSessionService {
 
     public UserSessionServiceImpl(UserSessionRepository userSessionRepository) {
         this.userSessionRepository = userSessionRepository;
+    }
+
+    @Override
+    public void validatePermission(UserType userType){
+        Optional<UserSession> optionalUserSession = getCurrentSession();
+        if (optionalUserSession.isPresent()){
+            throw new UnauthorizedException("unauthorized");
+        }
+
+        UserSession userSession = optionalUserSession.get();
+        if (!userSession.getUser().getUserType().equals(userType)){
+            throw new UnauthorizedException("unauthorized");
+        }
     }
 
     @Override
@@ -42,6 +57,14 @@ public class UserSessionServiceImpl implements UserSessionService {
     @Override
     public void invalidateSession(String token) {
         userSessionRepository.findByTokenAndActiveTrue(token).ifPresent(session -> {
+            session.setActive(false);
+            userSessionRepository.save(session);
+        });
+    }
+
+    @Override
+    public void logout() {
+        getCurrentSession().ifPresent(session -> {
             session.setActive(false);
             userSessionRepository.save(session);
         });

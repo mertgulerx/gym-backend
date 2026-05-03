@@ -1,4 +1,4 @@
-package com.ytu.gymbackend.utils;
+package com.ytu.gymbackend.util;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;

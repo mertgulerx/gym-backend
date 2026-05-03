@@ -1,12 +1,15 @@
 package com.ytu.gymbackend.service;
 
+import com.ytu.gymbackend.dto.ApiResponse;
 import com.ytu.gymbackend.dto.request.LoginRequest;
+import com.ytu.gymbackend.dto.request.UserRegisterRequest;
 import com.ytu.gymbackend.exception.UnauthorizedException;
 import com.ytu.gymbackend.model.user.User;
 import com.ytu.gymbackend.model.user.UserSession;
+import com.ytu.gymbackend.model.user.UserType;
 import com.ytu.gymbackend.repository.UserRepository;
 import com.ytu.gymbackend.service.session.UserSessionService;
-import com.ytu.gymbackend.utils.PasswordUtils;
+import com.ytu.gymbackend.util.PasswordUtils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,5 +36,14 @@ public class UserServiceImpl implements UserService {
         UserSession session = userSessionService.createSession(user, 24);
 
         return session.getToken();
+    }
+
+    @Override
+    public ApiResponse register(UserRegisterRequest request) {
+        User newUser = new User();
+        newUser.setUserType(UserType.valueOf(request.getUserType()));
+        newUser.setHashedPassword(passwordUtils.hashPassword(request.getPassword()));
+        userRepository.save(newUser);
+        return new ApiResponse(true, "user_created");
     }
 }

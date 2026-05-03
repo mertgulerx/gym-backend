@@ -1,0 +1,19 @@
+package com.ytu.gymbackend.validation;
+
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
+import jakarta.validation.constraints.NotNull;
+
+import java.lang.annotation.*;
+
+@Documented
+@Constraint(validatedBy = ValidEnumConstraint.class)
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+@NotNull
+public @interface ValidEnum {
+    Class<? extends Enum<?>> enumClass();
+    String message() default "must be any of enum {enumClass}";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
+}
