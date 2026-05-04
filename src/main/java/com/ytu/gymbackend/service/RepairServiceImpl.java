@@ -11,12 +11,14 @@ import com.ytu.gymbackend.model.machine.Repair;
 import com.ytu.gymbackend.repository.MachineRepository;
 import com.ytu.gymbackend.repository.RepairRepository;
 import com.ytu.gymbackend.service.session.UserSessionService;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@Service
 public class RepairServiceImpl implements RepairService{
     private final MachineRepository machineRepository;
     private final UserSessionService userSessionService;

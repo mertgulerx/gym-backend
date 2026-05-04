@@ -1,5 +1,6 @@
 package com.ytu.gymbackend.controller;
 
+import com.ytu.gymbackend.dto.ApiResponse;
 import com.ytu.gymbackend.dto.request.MaintenanceCreateRequest;
 import com.ytu.gymbackend.dto.request.RepairCreateRequest;
 import com.ytu.gymbackend.dto.response.MaintenanceResponse;
@@ -57,6 +58,16 @@ public class RepairController {
         userSessionService.validatePermission(new ArrayList<>(List.of(UserRole.ADMIN, UserRole.REPAIRMAN)));
 
         List<RepairResponse> response = repairService.getAllRepairs(machineId);
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @PutMapping("/{machineId}/repair/complete")
+    public ResponseEntity<ApiResponse> completeRepair(
+            @PathVariable @NotNull Long machineId
+    ) {
+        userSessionService.validatePermission(new ArrayList<>(List.of(UserRole.ADMIN, UserRole.REPAIRMAN)));
+
+        ApiResponse response = repairService.completeRepair(machineId);
         return ResponseEntity.status(200).body(response);
     }
 
