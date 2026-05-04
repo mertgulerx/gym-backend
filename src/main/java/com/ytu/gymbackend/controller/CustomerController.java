@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.ytu.gymbackend.util.MapperUtil.formatter;
+
 @RestController
 @RequestMapping("/api/customer")
 public class CustomerController {
@@ -102,7 +104,7 @@ public class CustomerController {
     ) {
         userSessionService.validatePermission(new ArrayList<>(List.of(UserRole.ADMIN, UserRole.CLERK)));
 
-        ApiResponse response = customerService.verifyHealthReport(id, LocalDate.parse(revisionDate));
+        ApiResponse response = customerService.verifyHealthReport(id, LocalDate.parse(revisionDate, formatter));
 
         return ResponseEntity.status(response.isSuccess() ? 200 : 400).body(response);
 

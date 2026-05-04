@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.ytu.gymbackend.util.MapperUtil.formatter;
+
 
 @Service
 public class MachineServiceImpl implements MachineService{
@@ -43,7 +45,7 @@ public class MachineServiceImpl implements MachineService{
 
         Machine machine = mapperUtil.map(request, Machine.class);
 
-        LocalDate lastMaintenanceDate = LocalDate.parse(request.getLastMaintenanceDate());
+        LocalDate lastMaintenanceDate = LocalDate.parse(request.getLastMaintenanceDate(), formatter);
         machine.setLastMaintenanceDate(lastMaintenanceDate);
         machine.setMachineStatus(MachineStatus.AVAILABLE);
 

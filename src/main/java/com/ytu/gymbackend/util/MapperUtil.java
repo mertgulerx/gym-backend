@@ -3,8 +3,12 @@ package com.ytu.gymbackend.util;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.time.format.DateTimeFormatter;
+
 @Component
 public class MapperUtil {
+    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
     private final ModelMapper modelMapper;
 
     public MapperUtil() {
