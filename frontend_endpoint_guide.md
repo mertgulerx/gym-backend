@@ -283,7 +283,7 @@ Tüm endpoint'ler `http://<domain>/api` temel dizini altındadır.
   ```json
   {
     "title": "Aylık Öğrenci",
-    "subscriptionDays": 30, // Min 2, Max 30
+    "subscriptionDays": 30, // Min 8, Max 30
     "subscriptionMonthPeriod": 1, // Min 1
     "chargeRate": 0.8,
     "chargeCost": 1200.00,

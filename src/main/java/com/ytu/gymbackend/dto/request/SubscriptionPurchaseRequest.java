@@ -16,7 +16,7 @@ public class SubscriptionPurchaseRequest {
     private String title;
 
     @Max(30)
-    @Min(2)
+    @Min(8)
     @NotNull
     private Integer subscriptionDays;
 

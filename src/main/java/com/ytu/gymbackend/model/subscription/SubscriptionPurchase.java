@@ -35,7 +35,7 @@ public class SubscriptionPurchase {
     private String title;
 
     @Max(30)
-    @Min(2)
+    @Min(8)
     @Column(nullable = false)
     private Integer subscriptionDays;
 
