@@ -3,13 +3,12 @@ package com.ytu.gymbackend.dto.request;
 import com.ytu.gymbackend.validation.ValidDate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.beans.factory.annotation.Value;
 
-@Getter
+@Data
 public class MachineCreateRequest {
     @NotNull
     @NotBlank

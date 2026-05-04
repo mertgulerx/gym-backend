@@ -1,7 +1,7 @@
 package com.ytu.gymbackend.controller;
 
-import com.ytu.gymbackend.dto.ApiResponse;
 import com.ytu.gymbackend.dto.request.MachineCreateRequest;
+import com.ytu.gymbackend.dto.response.MachineResponse;
 import com.ytu.gymbackend.model.user.UserRole;
 import com.ytu.gymbackend.service.MachineService;
 import com.ytu.gymbackend.service.session.UserSessionService;
@@ -14,7 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -29,22 +30,19 @@ public class MachineController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse> createMachine(
+    public ResponseEntity<MachineResponse> createMachine(
             @Valid @RequestBody MachineCreateRequest request,
             @RequestParam("file") @NotNull MultipartFile image
     ) {
         userSessionService.validatePermission(UserRole.ADMIN);
 
-        if (image.isEmpty() || !(Objects.equals(image.getContentType(), "image/jpeg"))) {
-            return ResponseEntity.status(400).body(new ApiResponse(false, "wrong_file_format"));
-        }
-
-        ApiResponse response = machineService.createMachine(request, image);
-        return ResponseEntity.status(response.isSuccess() ? 200 : 400).body(response);
+        MachineResponse response = machineService.createMachine(request, image);
+        return ResponseEntity.status(200).body(response);
     }
 
-    @GetMapping("/image/get")
-    public ResponseEntity<ByteArrayResource> getMachineImage(@RequestParam(name = "id") @NotNull Long id) {
+    @GetMapping("/{id}/image")
+    public ResponseEntity<ByteArrayResource> getMachineImage(@PathVariable @NotNull Long id) {
+        userSessionService.validatePermission(new ArrayList<>(List.of(UserRole.ADMIN, UserRole.REPAIRMAN)));
         byte[] image = machineService.getImage(id);
 
         ByteArrayResource resource = new ByteArrayResource(image);
@@ -54,5 +52,19 @@ public class MachineController {
                 .contentType(MediaType.IMAGE_JPEG)
                 .contentLength(image.length)
                 .body(resource);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<MachineResponse> getMachine(@PathVariable @NotNull Long id) {
+        userSessionService.validatePermission(new ArrayList<>(List.of(UserRole.ADMIN, UserRole.REPAIRMAN)));
+        MachineResponse response = machineService.getMachine(id);
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<MachineResponse>> getAllMachines() {
+        userSessionService.validatePermission(new ArrayList<>(List.of(UserRole.ADMIN, UserRole.REPAIRMAN)));
+        List<MachineResponse> response = machineService.getAllMachines();
+        return ResponseEntity.status(200).body(response);
     }
 }

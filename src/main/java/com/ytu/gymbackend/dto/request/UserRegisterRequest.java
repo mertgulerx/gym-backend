@@ -5,9 +5,10 @@ import com.ytu.gymbackend.validation.ValidEnum;
 import com.ytu.gymbackend.validation.ValidPassword;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import lombok.Getter;
 
-@Getter
+@Data
 public class UserRegisterRequest {
     @ValidEnum(enumClass = UserRole.class)
     @NotNull

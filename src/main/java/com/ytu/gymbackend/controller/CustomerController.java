@@ -2,6 +2,10 @@ package com.ytu.gymbackend.controller;
 
 import com.ytu.gymbackend.dto.ApiResponse;
 import com.ytu.gymbackend.dto.request.CustomerRegisterRequest;
+import com.ytu.gymbackend.dto.response.CustomerHealthReportResponse;
+import com.ytu.gymbackend.dto.response.CustomerRegisterResponse;
+import com.ytu.gymbackend.dto.response.CustomerResponse;
+import com.ytu.gymbackend.dto.response.UserResponse;
 import com.ytu.gymbackend.model.customer.CustomerHealthReport;
 import com.ytu.gymbackend.model.user.UserRole;
 import com.ytu.gymbackend.service.CustomerService;
@@ -34,17 +38,17 @@ public class CustomerController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse> registerCustomer(
+    public ResponseEntity<CustomerRegisterResponse> registerCustomer(
             @Valid @RequestBody CustomerRegisterRequest request
     ) {
         userSessionService.validatePermission(new ArrayList<>(List.of(UserRole.ADMIN, UserRole.CLERK)));
-        ApiResponse response = customerService.register(request);
-        return ResponseEntity.status(response.isSuccess() ? 200 : 400).body(response);
+        CustomerRegisterResponse response = customerService.register(request);
+        return ResponseEntity.status(200).body(response);
     }
 
-    @PostMapping("/health_report/upload")
+    @PostMapping("/{id}/health_report")
     public ResponseEntity<ApiResponse> uploadHealthReport(
-            @RequestParam(name = "id") @NotNull Long id,
+            @PathVariable @NotNull Long id,
             @RequestParam("file") @NotNull MultipartFile file
     ) {
         userSessionService.validatePermission(new ArrayList<>(List.of(UserRole.ADMIN, UserRole.CLERK)));
@@ -58,8 +62,8 @@ public class CustomerController {
         return ResponseEntity.status(response.isSuccess() ? 200 : 400).body(response);
     }
 
-    @GetMapping("/health_report/get")
-    public ResponseEntity<ByteArrayResource> getHealthReport(@RequestParam(name = "id") @NotNull Long id) {
+    @GetMapping("/{id}/health_report/document")
+    public ResponseEntity<ByteArrayResource> getHealthReportDocument(@PathVariable @NotNull Long id) {
         userSessionService.validatePermission(new ArrayList<>(List.of(UserRole.ADMIN, UserRole.CLERK)));
 
         CustomerHealthReport customerHealthReport = customerService.getHealthReport(id);
@@ -73,10 +77,27 @@ public class CustomerController {
                 .body(resource);
     }
 
+    @GetMapping("/{id}/health_report")
+    public ResponseEntity<CustomerHealthReportResponse> getHealthReport(@PathVariable @NotNull Long id) {
+        userSessionService.validatePermission(new ArrayList<>(List.of(UserRole.ADMIN, UserRole.CLERK)));
 
-    @PutMapping("/health_report/verify")
+        CustomerHealthReport customerHealthReport = customerService.getHealthReport(id);
+
+        CustomerHealthReportResponse response = new CustomerHealthReportResponse();
+        response.setCustomerId(customerHealthReport.getCustomer().getId());
+        response.setId(customerHealthReport.getId());
+        response.setRevisionDate(customerHealthReport.getRevisionDate().toString());
+        response.setEndDate(customerHealthReport.getEndDate().toString());
+        response.setCustomerHealthReportStatus(customerHealthReport.getCustomerHealthReportStatus().toString());
+        response.setFileName(customerHealthReport.getFileName());
+
+        return ResponseEntity.status(200).body(response);
+    }
+
+
+    @PutMapping("/{id}/health_report/verify")
     public ResponseEntity<ApiResponse> verifyHealthReport(
-            @RequestParam(name = "id") @NotNull Long id,
+            @PathVariable @NotNull Long id,
             @RequestParam(name = "revisionDate") @NotBlank @ValidDate String revisionDate
     ) {
         userSessionService.validatePermission(new ArrayList<>(List.of(UserRole.ADMIN, UserRole.CLERK)));
@@ -85,6 +106,28 @@ public class CustomerController {
 
         return ResponseEntity.status(response.isSuccess() ? 200 : 400).body(response);
 
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomerResponse> getUser(@PathVariable @NotNull Long id) {
+        userSessionService.validatePermission(new ArrayList<>(List.of(UserRole.ADMIN, UserRole.CLERK)));
+        CustomerResponse response = customerService.getCustomer(id);
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<CustomerResponse>> getAllUsers() {
+        userSessionService.validatePermission(new ArrayList<>(List.of(UserRole.ADMIN, UserRole.CLERK)));
+        List<CustomerResponse> response = customerService.getAllCustomers();
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomerResponse> updateUser(@PathVariable @NotNull Long id,
+                                                       @Valid @RequestBody CustomerRegisterRequest request) {
+        userSessionService.validatePermission(new ArrayList<>(List.of(UserRole.ADMIN, UserRole.CLERK)));
+        CustomerResponse response = customerService.updateCustomer(id, request);
+        return ResponseEntity.status(200).body(response);
     }
 
 }
