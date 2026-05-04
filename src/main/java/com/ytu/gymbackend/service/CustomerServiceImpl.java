@@ -112,7 +112,7 @@ public class CustomerServiceImpl implements CustomerService{
         Subscription subscriptionPurchase = customer.getSubscription();
         customerResponse.setIsActiveSubscriber(false);
 
-        if (subscriptionPurchase != null && subscriptionPurchase.getStatus().equals(SubscriptionStatus.PAID)){
+        if (subscriptionPurchase != null && subscriptionPurchase.getStatus().equals(SubscriptionStatus.ACTIVE)){
             customerResponse.setIsActiveSubscriber(true);
         }
         customerResponse.setAccountCreationDate(customer.getAccountCreationDate().toString());
@@ -138,7 +138,7 @@ public class CustomerServiceImpl implements CustomerService{
             Subscription subscriptionPurchase = customer.getSubscription();
             customerResponse.setIsActiveSubscriber(false);
 
-            if (subscriptionPurchase != null && subscriptionPurchase.getStatus().equals(SubscriptionStatus.PAID)){
+            if (subscriptionPurchase != null && subscriptionPurchase.getStatus().equals(SubscriptionStatus.ACTIVE)){
                 customerResponse.setIsActiveSubscriber(true);
             }
             customerResponse.setAccountCreationDate(customer.getAccountCreationDate().toString());
@@ -163,7 +163,7 @@ public class CustomerServiceImpl implements CustomerService{
         Subscription subscriptionPurchase = customer.getSubscription();
         customerResponse.setIsActiveSubscriber(false);
 
-        if (subscriptionPurchase != null && subscriptionPurchase.getStatus().equals(SubscriptionStatus.PAID)){
+        if (subscriptionPurchase != null && subscriptionPurchase.getStatus().equals(SubscriptionStatus.ACTIVE)){
             customerResponse.setIsActiveSubscriber(true);
         }
         customerResponse.setAccountCreationDate(customer.getAccountCreationDate().toString());
