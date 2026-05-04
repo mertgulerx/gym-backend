@@ -11,7 +11,7 @@ public class SubscriptionResponse {
 
     private String lastSubscriptionStartDate;
 
-    // If canceled or suspended. Doesn't have to exist..
+    // If canceled or suspended. Doesn't have to exist.
     @Nullable
     private String endDate;
 
