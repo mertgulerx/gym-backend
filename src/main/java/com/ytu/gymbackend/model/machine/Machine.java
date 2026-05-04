@@ -30,6 +30,9 @@ public class Machine {
     @Column(nullable = false)
     private Integer maintenanceMonthlyPeriod;
 
+    @Enumerated(value = EnumType.STRING)
+    private MachineStatus machineStatus;
+
     @OneToMany(mappedBy = "machine", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Maintenance> maintenanceList = new ArrayList<>();
 

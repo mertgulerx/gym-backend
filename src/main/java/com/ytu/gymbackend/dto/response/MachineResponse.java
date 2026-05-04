@@ -13,4 +13,6 @@ public class MachineResponse {
     private LocalDate lastMaintenanceDate;
 
     private Integer maintenanceMonthlyPeriod;
+
+    private String machineStatus;
 }

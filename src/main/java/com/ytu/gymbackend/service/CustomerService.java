@@ -27,5 +27,5 @@ public interface CustomerService {
 
     List<CustomerResponse> getAllCustomers();
 
-    CustomerResponse updateCustomer(@NotNull Long id);
+    CustomerResponse updateCustomer(@NotNull Long id, @Valid CustomerRegisterRequest request);
 }

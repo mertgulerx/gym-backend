@@ -2,8 +2,10 @@ package com.ytu.gymbackend.service;
 
 import com.ytu.gymbackend.dto.request.MaintenanceCreateRequest;
 import com.ytu.gymbackend.dto.response.MaintenanceResponse;
+import com.ytu.gymbackend.exception.BadRequestException;
 import com.ytu.gymbackend.exception.NotFoundException;
 import com.ytu.gymbackend.model.machine.Machine;
+import com.ytu.gymbackend.model.machine.MachineStatus;
 import com.ytu.gymbackend.model.machine.Maintenance;
 import com.ytu.gymbackend.repository.MachineRepository;
 import com.ytu.gymbackend.repository.MaintenanceRepository;
@@ -29,6 +31,10 @@ public class MaintenanceServiceImpl implements MaintenanceService{
     @Override
     public MaintenanceResponse createMaintenance(Long machineId, MaintenanceCreateRequest request) {
         Machine machine = machineRepository.findById(machineId).orElseThrow(() -> new NotFoundException("machine_not_found"));
+
+        if (!machine.getMachineStatus().equals(MachineStatus.AVAILABLE)){
+            throw new BadRequestException("machine_is_not_available");
+        }
 
         Maintenance maintenance = new Maintenance();
         maintenance.setCost(request.getCost());

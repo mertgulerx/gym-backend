@@ -29,6 +29,8 @@ public class Repair {
     @CreationTimestamp
     private LocalDate sentDate;
 
+    private LocalDate completeDate;
+
     private Integer estimatedReturnDays;
 
     @JoinColumn(name = "maintainer_id", nullable = false)

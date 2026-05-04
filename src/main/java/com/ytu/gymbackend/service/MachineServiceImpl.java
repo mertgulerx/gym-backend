@@ -9,6 +9,7 @@ import com.ytu.gymbackend.exception.NotFoundException;
 import com.ytu.gymbackend.model.customer.Customer;
 import com.ytu.gymbackend.model.customer.CustomerHealthReport;
 import com.ytu.gymbackend.model.machine.Machine;
+import com.ytu.gymbackend.model.machine.MachineStatus;
 import com.ytu.gymbackend.model.user.User;
 import com.ytu.gymbackend.repository.MachineRepository;
 import com.ytu.gymbackend.util.MapperUtil;
@@ -44,6 +45,7 @@ public class MachineServiceImpl implements MachineService{
 
         LocalDate lastMaintenanceDate = LocalDate.parse(request.getLastMaintenanceDate());
         machine.setLastMaintenanceDate(lastMaintenanceDate);
+        machine.setMachineStatus(MachineStatus.AVAILABLE);
 
         try {
             machine.setImage(image.getBytes());
@@ -70,7 +72,11 @@ public class MachineServiceImpl implements MachineService{
     public MachineResponse getMachine(Long id) {
         Machine machine = machineRepository.findById(id).orElseThrow(() -> new NotFoundException("machine_not_found"));
 
-        return mapperUtil.map(machine, MachineResponse.class);
+        MachineResponse machineResponse = mapperUtil.map(machine, MachineResponse.class);
+
+        machineResponse.setMachineStatus(machine.getMachineStatus().toString());
+
+        return machineResponse;
     }
 
     @Override
@@ -85,6 +91,7 @@ public class MachineServiceImpl implements MachineService{
 
         for (Machine machine : allMachines){
             MachineResponse machineResponse = mapperUtil.map(machine, MachineResponse.class);
+            machineResponse.setMachineStatus(machine.getMachineStatus().toString());
             machineResponseList.add(machineResponse);
         }
 
