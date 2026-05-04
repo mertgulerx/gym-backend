@@ -18,13 +18,19 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @Table(name = "subscription_models")
-public class SubscriptionModel {
+public class SubscriptionPurchase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "subscription_id")
+    private Subscription subscription;
+
     @CreationTimestamp
     private LocalDate creationDate;
+
+    private Boolean isCompleted;
 
     private String title;
 

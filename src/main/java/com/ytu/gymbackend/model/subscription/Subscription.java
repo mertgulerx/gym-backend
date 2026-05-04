@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -21,16 +23,15 @@ public class Subscription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "subscription_model_id")
-    @OneToOne
-    private SubscriptionModel subscriptionModel;
+    @OneToMany(mappedBy = "subscription", cascade = CascadeType.MERGE)
+    private List<SubscriptionPurchase> subscriptionPurchase = new ArrayList<>();
 
     @JoinColumn(name = "customer_id", nullable = false)
     @OneToOne
     private Customer customer;
 
     @CreationTimestamp
-    private LocalDate creationDate;
+    private LocalDate lastSubscriptionStartDate;
 
     // If canceled or suspended. Doesn't have to be final.
     private LocalDate endDate;

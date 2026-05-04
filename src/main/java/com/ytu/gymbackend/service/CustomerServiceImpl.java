@@ -4,7 +4,6 @@ import com.ytu.gymbackend.dto.ApiResponse;
 import com.ytu.gymbackend.dto.request.CustomerRegisterRequest;
 import com.ytu.gymbackend.dto.response.CustomerRegisterResponse;
 import com.ytu.gymbackend.dto.response.CustomerResponse;
-import com.ytu.gymbackend.dto.response.UserResponse;
 import com.ytu.gymbackend.exception.BadRequestException;
 import com.ytu.gymbackend.exception.NotFoundException;
 import com.ytu.gymbackend.model.customer.Customer;
@@ -12,8 +11,8 @@ import com.ytu.gymbackend.model.customer.CustomerHealthReport;
 import com.ytu.gymbackend.model.customer.CustomerHealthReportStatus;
 import com.ytu.gymbackend.model.customer.CustomerStatus;
 import com.ytu.gymbackend.model.subscription.Subscription;
+import com.ytu.gymbackend.model.subscription.SubscriptionPurchase;
 import com.ytu.gymbackend.model.subscription.SubscriptionStatus;
-import com.ytu.gymbackend.model.user.User;
 import com.ytu.gymbackend.repository.CustomerHealthReportRepository;
 import com.ytu.gymbackend.repository.CustomerRepository;
 import com.ytu.gymbackend.util.MapperUtil;
@@ -25,7 +24,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService{
@@ -111,10 +109,10 @@ public class CustomerServiceImpl implements CustomerService{
 
         customerResponse.setCustomerStatus(customer.getCustomerStatus().toString());
 
-        Subscription subscription = customer.getSubscription();
+        Subscription subscriptionPurchase = customer.getSubscription();
         customerResponse.setIsActiveSubscriber(false);
 
-        if (subscription != null && subscription.getStatus().equals(SubscriptionStatus.PAID)){
+        if (subscriptionPurchase != null && subscriptionPurchase.getStatus().equals(SubscriptionStatus.PAID)){
             customerResponse.setIsActiveSubscriber(true);
         }
         customerResponse.setAccountCreationDate(customer.getAccountCreationDate().toString());
@@ -137,10 +135,10 @@ public class CustomerServiceImpl implements CustomerService{
 
             customerResponse.setCustomerStatus(customer.getCustomerStatus().toString());
 
-            Subscription subscription = customer.getSubscription();
+            Subscription subscriptionPurchase = customer.getSubscription();
             customerResponse.setIsActiveSubscriber(false);
 
-            if (subscription != null && subscription.getStatus().equals(SubscriptionStatus.PAID)){
+            if (subscriptionPurchase != null && subscriptionPurchase.getStatus().equals(SubscriptionStatus.PAID)){
                 customerResponse.setIsActiveSubscriber(true);
             }
             customerResponse.setAccountCreationDate(customer.getAccountCreationDate().toString());
@@ -162,10 +160,10 @@ public class CustomerServiceImpl implements CustomerService{
 
         customerResponse.setCustomerStatus(customer.getCustomerStatus().toString());
 
-        Subscription subscription = customer.getSubscription();
+        Subscription subscriptionPurchase = customer.getSubscription();
         customerResponse.setIsActiveSubscriber(false);
 
-        if (subscription != null && subscription.getStatus().equals(SubscriptionStatus.PAID)){
+        if (subscriptionPurchase != null && subscriptionPurchase.getStatus().equals(SubscriptionStatus.PAID)){
             customerResponse.setIsActiveSubscriber(true);
         }
         customerResponse.setAccountCreationDate(customer.getAccountCreationDate().toString());
