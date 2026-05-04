@@ -66,8 +66,8 @@ public class MaintenanceServiceImpl implements MaintenanceService{
             throw new NotFoundException("maintenance_not_found");
         }
 
-        maintenanceList.sort(Comparator.comparing(Maintenance::getCreationDate).reversed());
-        Maintenance maintenance = maintenanceList.getFirst();
+        maintenanceList.sort(Comparator.comparing(Maintenance::getCreationDate));
+        Maintenance maintenance = maintenanceList.getLast();
 
 
         MaintenanceResponse maintenanceResponse = new MaintenanceResponse();

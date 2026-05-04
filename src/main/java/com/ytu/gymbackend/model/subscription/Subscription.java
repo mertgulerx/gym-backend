@@ -24,7 +24,7 @@ public class Subscription {
     private Long id;
 
     @OneToMany(mappedBy = "subscription", cascade = CascadeType.MERGE)
-    private List<SubscriptionPurchase> subscriptionPurchase = new ArrayList<>();
+    private List<SubscriptionPurchase> subscriptionPurchaseList = new ArrayList<>();
 
     @JoinColumn(name = "customer_id", nullable = false)
     @OneToOne
@@ -33,7 +33,7 @@ public class Subscription {
     @CreationTimestamp
     private LocalDate lastSubscriptionStartDate;
 
-    // If canceled or suspended. Doesn't have to be final.
+    // If canceled or suspended. Doesn't have to exist.
     private LocalDate endDate;
 
     @Enumerated(value = EnumType.STRING)
