@@ -2,6 +2,7 @@ package com.ytu.gymbackend.service;
 
 import com.ytu.gymbackend.dto.ApiResponse;
 import com.ytu.gymbackend.dto.request.CustomerRegisterRequest;
+import com.ytu.gymbackend.dto.response.CustomerHealthReportResponse;
 import com.ytu.gymbackend.dto.response.CustomerRegisterResponse;
 import com.ytu.gymbackend.dto.response.CustomerResponse;
 import com.ytu.gymbackend.model.customer.CustomerHealthReport;
@@ -28,4 +29,6 @@ public interface CustomerService {
     List<CustomerResponse> getAllCustomers();
 
     CustomerResponse updateCustomer(@NotNull Long id, @Valid CustomerRegisterRequest request);
+
+    List<CustomerHealthReportResponse> getExpiredHealthReports();
 }

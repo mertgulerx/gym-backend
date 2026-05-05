@@ -96,6 +96,14 @@ public class CustomerController {
         return ResponseEntity.status(200).body(response);
     }
 
+    @GetMapping("/health_report")
+    public ResponseEntity<List<CustomerHealthReportResponse>> getExpiredHealthReports() {
+        userSessionService.validatePermission(new ArrayList<>(List.of(UserRole.ADMIN, UserRole.CLERK)));
+
+        List<CustomerHealthReportResponse> response = customerService.getExpiredHealthReports();
+        return ResponseEntity.status(200).body(response);
+    }
+
 
     @PutMapping("/{id}/health_report/verify")
     public ResponseEntity<ApiResponse> verifyHealthReport(

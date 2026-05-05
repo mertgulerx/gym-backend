@@ -2,6 +2,7 @@ package com.ytu.gymbackend.service;
 
 import com.ytu.gymbackend.dto.ApiResponse;
 import com.ytu.gymbackend.dto.request.CustomerRegisterRequest;
+import com.ytu.gymbackend.dto.response.CustomerHealthReportResponse;
 import com.ytu.gymbackend.dto.response.CustomerRegisterResponse;
 import com.ytu.gymbackend.dto.response.CustomerResponse;
 import com.ytu.gymbackend.exception.BadRequestException;
@@ -169,6 +170,25 @@ public class CustomerServiceImpl implements CustomerService{
         customerResponse.setAccountCreationDate(customer.getAccountCreationDate().toString());
 
         return customerResponse;
+    }
+
+    @Override
+    public List<CustomerHealthReportResponse> getExpiredHealthReports() {
+        List<CustomerHealthReport> customerHealthReportList = customerHealthReportRepository.findAllByCustomerHealthReportStatusEquals(CustomerHealthReportStatus.EXPIRED);
+
+        List<CustomerHealthReportResponse> customerHealthReportResponseList = new ArrayList<>();
+
+        for (CustomerHealthReport customerHealthReport : customerHealthReportList){
+            CustomerHealthReportResponse response = new CustomerHealthReportResponse();
+            response.setCustomerId(customerHealthReport.getCustomer().getId());
+            response.setId(customerHealthReport.getId());
+            response.setRevisionDate(customerHealthReport.getRevisionDate().toString());
+            response.setEndDate(customerHealthReport.getEndDate().toString());
+            response.setCustomerHealthReportStatus(customerHealthReport.getCustomerHealthReportStatus().toString());
+            response.setFileName(customerHealthReport.getFileName());
+            customerHealthReportResponseList.add(response);
+        }
+        return customerHealthReportResponseList;
     }
 
     private Customer findCustomerById(Long id){
