@@ -160,7 +160,12 @@ Tüm endpoint'ler `http://<domain>/api` temel dizini altındadır.
 - **Rol:** `ADMIN`, `CLERK`
 - **Çıktı:** `CustomerHealthReportResponse`
 
-#### 3.3.7. Sağlık Raporu Doğrulama
+#### 3.3.7. Süresi Dolan (Expired) Sağlık Raporlarını Listeleme
+- **Endpoint:** `GET /api/customer/health_report`
+- **Rol:** `ADMIN`, `CLERK`
+- **Çıktı:** `List<CustomerHealthReportResponse>`
+
+#### 3.3.8. Sağlık Raporu Doğrulama
 - **Endpoint:** `PUT /api/customer/{id}/health_report/verify`
 - **Rol:** `ADMIN`, `CLERK`
 - **Query Parametresi:** `revisionDate` (`dd/MM/yyyy` formatında `@ValidDate`)

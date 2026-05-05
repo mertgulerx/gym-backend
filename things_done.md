@@ -34,3 +34,8 @@ Bu doküman, Gym Backend projesinde geliştirilmiş olan özellikleri, sınıfla
 ## 6. İstatistikler (Statistics)
 - **Finansal İstatistikler:** Belirli bir zaman aralığı (`startDate` ve `endDate`) verilerek sistemdeki toplam gelir (satın alınan aboneliklerden), bakım masrafı ve onarım masrafı istatistikleri hesaplanıp tek bir servisle (`StatisticsController`) geri döndürülebilmektedir.
 - **Tarih Kontrolleri:** İstatistik aramalarında ve diğer tüm tarih verilerinde özel bir `@ValidDate` validasyonu çalışmakta, artık yıllar dahil tarihlerin `dd/MM/yyyy` formatında doğru girilmesi sağlanmaktadır.
+
+## 7. Otomatik Arka Plan İşlemleri (Scheduled Tasks)
+- **Abonelik Süresi Kontrolü:** Her gün gece yarısı (00:00) çalışan arka plan servisi ile süresi dolan aboneliklerin durumu otomatik olarak güncellenmektedir.
+- **Sağlık Raporu Süresi Kontrolü:** Her gün saat 01:00'da çalışan arka plan servisi ile bitiş tarihi (endDate) geçmiş olan sağlık raporlarının durumu `EXPIRED` (Süresi Dolmuş) olarak işaretlenmekte ve ilgili müşterinin durumu `PENDING` (Beklemede) statüsüne çekilmektedir.
+- **Süresi Dolan Raporların Listelenmesi:** Süresi dolmuş olan tüm sağlık raporları ayrı bir API uç noktası üzerinden sorgulanabilmektedir.
