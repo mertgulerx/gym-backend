@@ -69,7 +69,7 @@ public class SubscriptionServiceImpl implements SubscriptionService{
         }
 
 
-        if (customer.getSubscription().getSubscriptionPurchaseList().getLast().getIsCompleted() != false){
+        if (customer.getSubscription().getSubscriptionPurchaseList().getLast().getIsCompleted() == false){
             throw new BadRequestException("customer_already_has_active_subscription_purchase");
         }
 
