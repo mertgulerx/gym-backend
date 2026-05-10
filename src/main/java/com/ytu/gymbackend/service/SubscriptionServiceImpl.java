@@ -73,7 +73,7 @@ public class SubscriptionServiceImpl implements SubscriptionService{
             throw new BadRequestException("customer_already_has_active_subscription_purchase");
         }
 
-        if (customer.getCustomerHealthReport().getEndDate().isBefore(LocalDate.now().plusMonths(request.getSubscriptionMonthPeriod()))){
+        if (customer.getCustomerHealthReport().getEndDate().isBefore(LocalDate.now().plusMonths(request.getSubscriptionMonthPeriod()).minusDays(7))){
             throw new BadRequestException("health_report_expires_before_subscription");
         }
 
