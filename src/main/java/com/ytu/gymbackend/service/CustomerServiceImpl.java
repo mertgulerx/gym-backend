@@ -99,6 +99,8 @@ public class CustomerServiceImpl implements CustomerService{
         customerHealthReport.setRevisionDate(revisionDate);
         customerHealthReport.setEndDate(revisionDate.plusYears(1));
         customerHealthReportRepository.save(customerHealthReport);
+        customer.setCustomerStatus(CustomerStatus.VERIFIED);
+        customerRepository.save(customer);
         return new ApiResponse(true, "customer_health_report_verified");
     }
 
