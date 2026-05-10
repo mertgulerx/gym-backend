@@ -2,12 +2,17 @@ package com.ytu.gymbackend.controller;
 
 import com.ytu.gymbackend.dto.ApiResponse;
 import com.ytu.gymbackend.dto.request.LoginRequest;
+import com.ytu.gymbackend.dto.response.UserResponse;
+import com.ytu.gymbackend.exception.UnauthorizedException;
+import com.ytu.gymbackend.model.user.User;
+import com.ytu.gymbackend.model.user.UserSession;
 import com.ytu.gymbackend.service.UserService;
 import com.ytu.gymbackend.service.session.UserSessionService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +45,25 @@ public class AuthController {
         userSessionService.logout();
         response.addCookie(removeSessionCookie("USER_SESSION"));
         return ResponseEntity.ok(new ApiResponse(true, "logout_success"));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> me() {
+        UserSession session = userSessionService.getCurrentSession()
+                .orElseThrow(() -> new UnauthorizedException("unauthenticated"));
+        User user = session.getUser();
+
+        UserResponse response = new UserResponse();
+        response.setId(user.getId());
+        response.setName(user.getName());
+        response.setSurName(user.getSurName());
+        response.setUserRole(user.getUserRole().toString());
+        response.setAccountCreationDate(
+                user.getAccountCreationDate() != null
+                        ? user.getAccountCreationDate().toString()
+                        : null
+        );
+        return ResponseEntity.ok(response);
     }
 
     private Cookie createSessionCookie(String name, String token) {

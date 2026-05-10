@@ -30,7 +30,7 @@ public class Maintenance {
     private LocalDate creationDate;
 
     @JoinColumn(name = "maintainer_id", nullable = false)
-    @OneToOne
+    @ManyToOne
     private User maintainer;
 
     private BigDecimal cost;

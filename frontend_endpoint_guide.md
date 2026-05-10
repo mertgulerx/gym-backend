@@ -73,6 +73,22 @@ Tüm endpoint'ler `http://<domain>/api` temel dizini altındadır.
 - **Rol:** Oturum açmış kullanıcılar
 - **Çıktı:** `ApiResponse` (Cookie sıfırlanır)
 
+#### 3.1.3. Mevcut Kullanıcı Bilgisi
+- **Endpoint:** `GET /api/auth/me`
+- **Rol:** Oturum açmış kullanıcılar (cookie'den çözülür)
+- **Çıktı:** `UserResponse`
+  ```json
+  {
+    "id": 1,
+    "name": "Ronnie",
+    "surName": "Coleman",
+    "userRole": "ADMIN",
+    "accountCreationDate": "2026-05-04T16:09:27.582976"
+  }
+  ```
+- **Hata:** Geçerli `USER_SESSION` cookie'si yoksa `401 unauthenticated`.
+- Frontend bu endpoint'i login sonrası kullanıcının kim olduğunu (özellikle CLERK/REPAIRMAN için, çünkü `/api/user/{id}` sadece ADMIN erişimine açıktır) öğrenmek için kullanır.
+
 ---
 
 ### 3.2. UserController (`/api/user`)
