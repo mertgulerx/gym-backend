@@ -58,7 +58,7 @@ public class RepairServiceImpl implements RepairService{
         repairResponse.setInfo(repair.getInfo());
         repairResponse.setSentDate(repair.getSentDate().toString());
         repairResponse.setIsCompleted(repair.getIsCompleted());
-        repairResponse.setEstimatedReturnDays(repairResponse.getEstimatedReturnDays());
+        repairResponse.setEstimatedReturnDays(repair.getEstimatedReturnDays());
         return repairResponse;
     }
 
@@ -106,7 +106,7 @@ public class RepairServiceImpl implements RepairService{
         if (repair.getCompleteDate() != null){
             repairResponse.setCompleteDay(repair.getCompleteDate().toString());
         }
-        repairResponse.setEstimatedReturnDays(repairResponse.getEstimatedReturnDays());
+        repairResponse.setEstimatedReturnDays(repair.getEstimatedReturnDays());
         return repairResponse;
     }
 
@@ -137,7 +137,7 @@ public class RepairServiceImpl implements RepairService{
             if (repair.getCompleteDate() != null){
                 repairResponse.setCompleteDay(repair.getCompleteDate().toString());
             }
-            repairResponse.setEstimatedReturnDays(repairResponse.getEstimatedReturnDays());
+            repairResponse.setEstimatedReturnDays(repair.getEstimatedReturnDays());
             repairResponseList.add(repairResponse);
         }
 

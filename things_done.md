@@ -39,3 +39,27 @@ Bu doküman, Gym Backend projesinde geliştirilmiş olan özellikleri, sınıfla
 - **Abonelik Süresi Kontrolü:** Her gün gece yarısı (00:00) çalışan arka plan servisi ile süresi dolan aboneliklerin durumu otomatik olarak güncellenmektedir.
 - **Sağlık Raporu Süresi Kontrolü:** Her gün saat 01:00'da çalışan arka plan servisi ile bitiş tarihi (endDate) geçmiş olan sağlık raporlarının durumu `EXPIRED` (Süresi Dolmuş) olarak işaretlenmekte ve ilgili müşterinin durumu `PENDING` (Beklemede) statüsüne çekilmektedir.
 - **Süresi Dolan Raporların Listelenmesi:** Süresi dolmuş olan tüm sağlık raporları ayrı bir API uç noktası üzerinden sorgulanabilmektedir.
+
+## 8. Frontend Entegrasyonu için Eklenenler (2026-05-10)
+
+`gym-frontend` operatör paneli ile uyumlu çalışmak için aşağıdaki iyileştirmeler yapılmıştır:
+
+### 8.1. Yeni Endpoint
+- **`GET /api/auth/me`** — Aktif `USER_SESSION` cookie'sini çözüp giriş yapmış kullanıcının `UserResponse`'unu döner. Frontend, login sonrası kullanıcının kim olduğunu öğrenmek için bu endpoint'i kullanır. Yetkisiz erişimde `401 unauthenticated` döner.
+
+### 8.2. Düzeltilen Hatalar (Bug Fixes)
+- **`ValidDateConstraint` regex bozukluğu:** Java string literal içinde dört kat kaçışlı backslash (`\\\\/`) ve sonda fazladan tırnak işareti vardı; geçerli `dd/MM/yyyy` tarihleri bile reddediliyordu. Regex temiz bir şekilde yeniden yazıldı, artık `01/04/2026` gibi geçerli tarihler doğru kabul ediliyor (`@ValidDate` artık beklendiği gibi çalışıyor).
+- **`RepairServiceImpl` self-assignment:** `repairResponse.setEstimatedReturnDays(repairResponse.getEstimatedReturnDays())` üç farklı metotta `repairResponse` üstünden okuyup yazıyordu — sonuç hep `null` oluyordu. Düzeltme: `repair.getEstimatedReturnDays()` (entity'den okuma).
+- **`Maintenance.maintainer` ve `Repair.maintainer` `@OneToOne` → `@ManyToOne`:** Bir teknisyen birden fazla bakım/onarım yapabileceği için `@OneToOne` yanlış unique constraint üretiyordu (ikinci bakım kaydı denendiğinde `unique index violation` veriliyordu). İlişki `@ManyToOne` olarak düzeltildi.
+
+### 8.3. Demo Veri Seeder'ı (`DataStarter` Genişletildi)
+- `application.properties`'e `gym.seed.demo=true` propertysi eklendi. Bu açık olduğunda ve veritabanı boş olduğunda `DataStarter` aşağıdaki demo veriyi otomatik yükler:
+  - **6 personel** — 1 ana yönetici (`Ronnie Coleman`, ID 1) + 1 ek admin + 2 resepsiyon + 2 tekniker (hepsinin demo şifresi `Demo123!`, gizli kelimesi `demo`)
+  - **6 tarife** — Aylık Standart, Aylık Öğrenci, Yıllık Premium, Sabah Kuşu, Gece Vardiyası, VIP Sınırsız
+  - **22 üye** — Karışık `VERIFIED` / `PENDING` / `BLACKLIST` durumlarında, gerçekçi telefonlar
+  - **Sağlık raporları** — VERIFIED ve PENDING üyeler için PDF placeholder + revisionDate/endDate
+  - **Abonelikler ve satın alım kayıtları** — Aktif üyeler için tarife karışımı (saat sınırlı dahil)
+  - **12 makine** — 10 `AVAILABLE` + 2 `ON_REPAIR_SERVICE`
+  - **Bakım kayıtları** — Her makine için 1–3 rastgele bakım (gerçek personel referansı ile)
+  - **Onarımlar** — 2 tamamlanmış + 2 açık onarım kaydı
+- Üretim ortamına geçerken sadece `gym.seed.demo=false` yaparak demo veri yüklemesi devre dışı bırakılır; yine sadece tek bir admin (`Ronnie Coleman`) seed edilir.

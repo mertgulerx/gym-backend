@@ -34,7 +34,7 @@ public class Repair {
     private Integer estimatedReturnDays;
 
     @JoinColumn(name = "maintainer_id", nullable = false)
-    @OneToOne
+    @ManyToOne
     private User maintainer;
 
     private BigDecimal cost;
