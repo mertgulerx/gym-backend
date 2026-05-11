@@ -105,12 +105,12 @@ public class DataStarter implements ApplicationListener<ContextRefreshedEvent> {
 
         // ---- Charge profiles ----
         List<ChargeProfile> profiles = new ArrayList<>();
-        profiles.add(createProfile("Aylık Standart", "Standart üyelik planı", "1.00", "1500"));
-        profiles.add(createProfile("Aylık Öğrenci", "Öğrenci indirimli plan (öğrenci belgesi gerekli)", "0.70", "1050"));
-        profiles.add(createProfile("Yıllık Premium", "12 ay önden ödemeli, %15 indirim", "0.85", "15300"));
-        profiles.add(createProfile("Sabah Kuşu", "Sadece 06:00-12:00 arası geçerli", "0.60", "900"));
-        profiles.add(createProfile("Gece Vardiyası", "20:00-23:00 arası özel tarife", "0.65", "975"));
-        profiles.add(createProfile("VIP Sınırsız", "Tüm hizmetler dahil VIP plan", "1.50", "2250"));
+        profiles.add(createProfile("Aylık Standart", "Standart üyelik planı", "1.00", "60"));
+        profiles.add(createProfile("Aylık Öğrenci", "Öğrenci indirimli plan (öğrenci belgesi gerekli)", "0.70", "60"));
+        profiles.add(createProfile("Yıllık Premium", "12 ay önden ödemeli, %15 indirim", "0.85", "60"));
+        profiles.add(createProfile("Sabah Kuşu", "Sadece 06:00-12:00 arası geçerli", "0.60", "60"));
+        profiles.add(createProfile("Gece Vardiyası", "20:00-23:00 arası özel tarife", "0.65", "60"));
+        profiles.add(createProfile("VIP Sınırsız", "Tüm hizmetler dahil VIP plan", "1.50", "60"));
 
         // ---- Customers ----
         Object[][] customerSeed = {
