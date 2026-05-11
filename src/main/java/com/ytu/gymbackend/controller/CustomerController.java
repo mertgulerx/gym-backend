@@ -7,6 +7,7 @@ import com.ytu.gymbackend.dto.response.CustomerRegisterResponse;
 import com.ytu.gymbackend.dto.response.CustomerResponse;
 import com.ytu.gymbackend.dto.response.UserResponse;
 import com.ytu.gymbackend.model.customer.CustomerHealthReport;
+import com.ytu.gymbackend.model.customer.CustomerHealthReportStatus;
 import com.ytu.gymbackend.model.user.UserRole;
 import com.ytu.gymbackend.service.CustomerService;
 import com.ytu.gymbackend.service.session.UserSessionService;
@@ -14,6 +15,7 @@ import com.ytu.gymbackend.validation.ValidDate;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.Comment;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -88,8 +90,10 @@ public class CustomerController {
         CustomerHealthReportResponse response = new CustomerHealthReportResponse();
         response.setCustomerId(customerHealthReport.getCustomer().getId());
         response.setId(customerHealthReport.getId());
-        response.setRevisionDate(customerHealthReport.getRevisionDate().toString());
-        response.setEndDate(customerHealthReport.getEndDate().toString());
+        if (!customerHealthReport.getCustomerHealthReportStatus().equals(CustomerHealthReportStatus.PENDING)){
+            response.setRevisionDate(customerHealthReport.getRevisionDate().toString());
+            response.setEndDate(customerHealthReport.getEndDate().toString());
+        }
         response.setCustomerHealthReportStatus(customerHealthReport.getCustomerHealthReportStatus().toString());
         response.setFileName(customerHealthReport.getFileName());
 

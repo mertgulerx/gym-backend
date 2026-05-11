@@ -68,8 +68,7 @@ public class SubscriptionServiceImpl implements SubscriptionService{
             throw new BadRequestException("customer_subscription_not_initialized");
         }
 
-
-        if (customer.getSubscription().getSubscriptionPurchaseList().getLast().getIsCompleted() == false){
+        if (!customer.getSubscription().getSubscriptionPurchaseList().isEmpty() && customer.getSubscription().getSubscriptionPurchaseList().getLast().getIsCompleted() == false){
             throw new BadRequestException("customer_already_has_active_subscription_purchase");
         }
 
@@ -237,6 +236,7 @@ public class SubscriptionServiceImpl implements SubscriptionService{
         }
 
         subscription.setStatus(SubscriptionStatus.CANCELED);
+        subscription.setEndDate(LocalDate.now());
         subscriptionRepository.save(subscription);
 
         return new ApiResponse(true, "subscription_canceled_successfuly");

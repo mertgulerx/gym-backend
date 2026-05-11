@@ -1,9 +1,7 @@
 package com.ytu.gymbackend.dto.request;
 
 import com.ytu.gymbackend.validation.ValidDate;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
@@ -21,6 +19,7 @@ public class MachineCreateRequest {
     @ValidDate
     private String lastMaintenanceDate;
 
-    @Size(min = 1, max = 128)
+    @Min(1)
+    @Max(128)
     private Integer maintenanceMonthlyPeriod;
 }

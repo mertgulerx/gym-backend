@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "subscription_models")
+@Table(name = "subscription_purchases")
 public class SubscriptionPurchase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

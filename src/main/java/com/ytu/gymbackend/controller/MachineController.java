@@ -2,6 +2,7 @@ package com.ytu.gymbackend.controller;
 
 import com.ytu.gymbackend.dto.request.MachineCreateRequest;
 import com.ytu.gymbackend.dto.response.MachineResponse;
+import com.ytu.gymbackend.exception.BadRequestException;
 import com.ytu.gymbackend.model.user.UserRole;
 import com.ytu.gymbackend.service.MachineService;
 import com.ytu.gymbackend.service.session.UserSessionService;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -31,9 +33,12 @@ public class MachineController {
 
     @PostMapping("/create")
     public ResponseEntity<MachineResponse> createMachine(
-            @Valid @RequestBody MachineCreateRequest request,
-            @RequestParam("file") @NotNull MultipartFile image
+            @Valid @RequestPart MachineCreateRequest request,
+            @RequestPart("file") @NotNull MultipartFile image
     ) {
+        if (image.isEmpty() || !((Objects.equals(image.getContentType(), "image/jpeg") || (Objects.equals(image.getContentType(), "image/png"))))) {
+            throw new BadRequestException("wrong_file_format");
+        }
         userSessionService.validatePermission(UserRole.ADMIN);
 
         MachineResponse response = machineService.createMachine(request, image);

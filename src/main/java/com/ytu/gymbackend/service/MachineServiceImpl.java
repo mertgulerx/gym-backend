@@ -39,10 +39,6 @@ public class MachineServiceImpl implements MachineService{
 
     @Override
     public MachineResponse createMachine(MachineCreateRequest request, @NotNull MultipartFile image) {
-        if (image.isEmpty() || !(Objects.equals(image.getContentType(), "image/jpeg"))) {
-            throw new BadRequestException("wrong_file_format");
-        }
-
         Machine machine = mapperUtil.map(request, Machine.class);
 
         LocalDate lastMaintenanceDate = LocalDate.parse(request.getLastMaintenanceDate(), formatter);
